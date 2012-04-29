@@ -17,6 +17,12 @@ Tendril-OAuth
 .. automodule:: tendril_oauth
    :members:
 
+Router
+=============
+
+.. automodule:: router.gen
+   :members:
+
 Indices and tables
 ==================
 

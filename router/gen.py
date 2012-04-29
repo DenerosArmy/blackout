@@ -1,8 +1,15 @@
+#!/usr/bin/env python
 """Fake router page generator"""
 import sys
 
-def generate(mac_addresses):
-    with open("DHCPTable.gen.html") as f:
+def generate_linksys(mac_addresses, input="DHCPTable.gen.html", output="DHCPTable.html"):
+    """Generate a HTML page for a Linksys router
+
+    :param list mac_addresses: list of MAC addresses
+    :param str input: Input file (template)
+    :param str input: Output file
+    """
+    with open(input) as f:
         text = f.read()
     begin = text.split("// BEGIN USER TABLE")[0]
     end = text.split("// END USER TABLE")[1]
@@ -14,7 +21,7 @@ def generate(mac_addresses):
         ret += template.format(i=i, mac=mac)
     ret += end
 
-    with open("DHCPTable.html", "w") as f:
+    with open(output, "w") as f:
         f.write(ret)
 
 def main(argv):
@@ -22,7 +29,7 @@ def main(argv):
         print """usage: python gen.py [list of MAC addresses]
 """
     else:
-        generate(argv[1:])
+        generate_linksys(argv[1:])
 
 if __name__ == '__main__':
     main(sys.argv)
