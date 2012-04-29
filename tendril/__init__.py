@@ -1,4 +1,5 @@
 """Tendril API wrapper for python"""
+from bs4 import BeautifulSoup
 from copy import copy
 import string
 import requests
@@ -70,3 +71,71 @@ class Tendril(object):
         else:
             logging.error(r.text)
             return None
+
+    def devices(self):
+        xml = self.get('/connect/user/{user-id}/account/{account-id}/location/{location-id}/network/default-network/device',
+                         user_id='current-user',
+                         account_id='default-account',
+                         location_id='default-location',
+                         include_extended_properties="false")
+        parser = BeautifulSoup(xml)
+
+        device_id_list = []
+        device_name_list = []
+        count = 0
+
+        id_list = parser.find_all('deviceid')
+        for a in id_list:
+            device_id_list.append(str(a.string))
+            count = count+1
+
+        name_list = parser.find_all('name')
+        for p in name_list:
+            if str(p.parent.name) == 'device':
+                device_name_list.append(str(p.string))
+
+        return dict(zip(device_id_list, device_name_list))
+
+    def get_location(self):
+        response_XML = self.get("/connect/user/{user-id}/account/{account-id}/location/{location-id}",
+                                  user_id='current-user',
+                                  account_id='default-account',
+                                  location_id='default_location')
+        parser = BeautifulSoup(response_XML)
+        parser.prettify()
+        for node in parser.find_all('location'):
+            return node['id']
+
+    def set_device_mode(self, device_id, location_id, mode='Off'):
+        text = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<setVoltDataRequest xmlns="http://platform.tendrilinc.com/tnop/extension/ems"
+  deviceId="{device_id}" locationId="{location_id}">
+  <data>
+    <mode>{mode}</mode>
+  </data>
+</setVoltDataRequest>
+""".format(device_id=device_id, location_id=location_id, mode=mode)
+        xml = self.post('/connect/device-action', text)
+        parser = BeautifulSoup(xml)
+        parser.prettify()
+        request_id = parser.html.body.setvoltdatarequest['requestid'] # HACK: use xml parser instead
+        result = self.get('/connect/device-action/{request-id}', request_id=request_id)
+        if mode not in result:
+            logging.error(result)
+            return False
+        return True
+
+    def query_device_mode(self, device_id, location_id):
+        text = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<getVoltDataRequest
+  xmlns="http://platform.tendrilinc.com/tnop/extension/ems"
+  deviceId="{device_id}" locationId="{location_id}">
+</getVoltDataRequest>
+""".format(device_id=device_id, location_id=location_id)
+        xml = self.post('/connect/device-action', text)
+        if 'On' in xml:
+            return 'On'
+        elif 'Off' in xml:
+            return 'Off'
+        else:
+            assert False

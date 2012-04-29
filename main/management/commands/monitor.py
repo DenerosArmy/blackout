@@ -14,9 +14,11 @@ def main(phone_number, *blacklist):
     blacklist = Set(blacklist)
 
     while True:
-        r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))
-        print(r)
-        addresses = Set(scraper.genAddrList(r.text))
+        # r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))
+        # print(r)
+        # addresses = Set(scraper.genAddrList(r.text))
+        with open("scraper/sample.html") as f:
+            addresses = Set(scraper.genAddrList(f.read()))
 
         print(addresses)
         union = blacklist.union(addresses)
@@ -43,10 +45,10 @@ def left_the_house(phone_number):
     print(len(d))
     assert len(d) == 1
     t = Tendril(oauth_token=d[0].access_token)
-    p = DataProcessor(t, phone_number=phone_number)
+    data_processor = DataProcessor(t, phone_number=phone_number)
     tm = TextMessage("vaishaal@berkeley.edu", "warnmedc")
-    power = p.power_use()
-    if power[0] > 0.00005:
+    power = data_processor.power_use()
+    if True or power[0] > 0.00005:
         print "Has power usage"
         print "Sending text message"
         tm.sendSMS(phone_number, "You have appliances still on! Turn off? Y/N")
@@ -57,7 +59,7 @@ def left_the_house(phone_number):
         answer = tm.receiveSMS()[0][u'text']
         if answer[0] == 'Y' or answer[0] == 'y':
             print "Attempting to turn off..."
-            power = p.turn_off('804f58aaaaaa0358')
+            power = data_processor.turn_off('804f58aaaaaa0358')
     else:
         print "Does not have power usage"
 
