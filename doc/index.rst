@@ -23,6 +23,12 @@ Router
 .. automodule:: router.gen
    :members:
 
+SMS
+=============
+
+.. automodule:: sms
+   :members:
+
 Indices and tables
 ==================
 
