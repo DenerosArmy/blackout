@@ -14,6 +14,7 @@ API_KEY = 'a4ca80c12d6fc2612858602edc4d75dd'
 APP_SECRET = '08096b9b773a9e48205cd9fa9534390d' 
 
 class MACAddressForm(forms.Form):
+    phone = forms.CharField()
     addresses = forms.MultipleChoiceField(widget=CheckboxSelectMultiple, choices=[]) 
 
 def authorized(request):
@@ -32,6 +33,8 @@ def authorized(request):
             for mac in choices:
                 obj = BlacklistedMAC(address=mac)
                 obj.save()
+            phone = form.cleaned_data['phone'].replace('(','').replace(')','').replace('-','').replace('.','')
+            Data.objects.all()[0].phone = phone
             return HttpResponseRedirect('/done/') # Redirect after POST
     else:
         form = MACAddressForm()

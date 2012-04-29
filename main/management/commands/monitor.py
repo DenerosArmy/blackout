@@ -9,9 +9,23 @@ from tendril import Tendril
 from sms.texting import TextMessage
 import requests
 
-def main(phone_number, *blacklist):
+import webbrowser
+
+AUTHORIZE_URL = 'https://dev.tendrilinc.com/oauth/authorize?response_type=code&client_id=a4ca80c12d6fc2612858602edc4d75dd&redirect_uri=http://localhost:1337/auth&scope=account consumption device&state=cded79abe00bb49dbc54d86fc57a7501'
+
+
+def main(*blacklist):
     checkArgs(blacklist)
     blacklist = Set(blacklist)
+
+    Data.objects.all().delete()
+    BlacklistedMAC.objects.all().delete()
+    webbrowser.open(AUTHORIZE_URL)
+    while Data.objects.count() == 0:
+        sleep(5)
+    while BlacklistedMAC.objects.count() == 0:
+        sleep(5)
+
     for blacklisted_mac in BlacklistedMAC.objects.all():
         blacklist.add(blacklisted_mac.address)
 
@@ -27,7 +41,7 @@ def main(phone_number, *blacklist):
         #print(union)
         if len(union) == len(blacklist):
             print("YOU HAVE LEFT THE HOUSE")
-            left_the_house(phone_number)
+            left_the_house(Data.objects.all()[0].phone)
             break
         sleep(1)
 
@@ -70,11 +84,8 @@ def left_the_house(phone_number):
         print "Does not have power usage"
 
 class Command(BaseCommand):
-    args = 'phone_number mac_address'
+    args = 'mac_address'
     help = 'Monitor'
 
     def handle(self, *args, **options):
-        if len(args) == 0:
-            raise CommandError('Expected at least one argument')
-
-        main(args[0], *args[1:])
+        main(*args)
