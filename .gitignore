@@ -2,3 +2,6 @@
 *.pot
 *.pyc
 local_settings.py
+.*.sw[a-z]
+8.un~
+Session.vim
