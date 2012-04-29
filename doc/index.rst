@@ -29,6 +29,12 @@ SMS
 .. automodule:: sms
    :members:
 
+Tendril
+=============
+
+.. automodule:: tendril
+   :members:
+
 Indices and tables
 ==================
 
