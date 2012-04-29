@@ -2,6 +2,11 @@
 
 
 def findTableLines(html):
+    """Finds the specific lines in the file that contains the table code
+
+    :param file html: The html file to be parsed through
+    :rtype: list 
+    """
     table_lines = []
     line = ''
     while line != 'var table = new Array();\n':
@@ -16,6 +21,11 @@ def findTableLines(html):
     return table_lines
 
 def parseTableLines(lines):
+    """Parses through the list of lines to generate a list of MAC addresses
+
+    :param list lines: The list of valid lines from the router html file
+    :rtype: list
+    """
     addresses = []
     for line in lines:
         line = line.split(',')
@@ -23,6 +33,12 @@ def parseTableLines(lines):
     return addresses
 
 def genAddrList(html):
+    """Generates a list of MAC addresses from an html page of the router's
+    device list
+
+    :param file html: The html file to be parsed
+    :rtntype: list
+    """
     lines = findTableLines(open(html))
     names = parseTableLines(lines)
     return names
