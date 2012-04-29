@@ -8,7 +8,7 @@ from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 import requests 
 import json 
-from models import Data, BlacklistedMAC
+from models import Data, BlacklistedMAC, PhoneNumber
 from scraper import scraper
 API_KEY = 'a4ca80c12d6fc2612858602edc4d75dd'
 APP_SECRET = '08096b9b773a9e48205cd9fa9534390d' 
@@ -20,9 +20,11 @@ class MACAddressForm(forms.Form):
 def authorized(request):
     c = {}
     c.update(csrf(request))
-    with open("scraper/sample.html") as f:
-        addresses = scraper.genAddrList(f.read())
-        addresses = [(x, 'Test (' + x + ')') for x in addresses]
+    print "pre_scraper"
+    addresses = scraper.genAddrList()
+    print "post_scraper"
+    addresses = [(k,v + '(' + k +')') for k,v in addresses.items()]
+
 
     if request.method == 'POST': # If the form has been submitted...
         form = MACAddressForm(request.POST) # A form bound to the POST data
@@ -30,11 +32,18 @@ def authorized(request):
         if form.is_valid():
             choices = form.cleaned_data['addresses']
             BlacklistedMAC.objects.all().delete()
+            phone = form.cleaned_data['phone'].replace('(','').replace(')','').replace('-','').replace('.','')
+
+            if len(phone) == 10:
+                p = PhoneNumber(phone=phone)
+                p.save()
+            else:
+                c['form'] = form
+                return render_to_response('auth.html', c)
+
             for mac in choices:
                 obj = BlacklistedMAC(address=mac)
                 obj.save()
-            phone = form.cleaned_data['phone'].replace('(','').replace(')','').replace('-','').replace('.','')
-            Data.objects.all()[0].phone = phone
             return HttpResponseRedirect('/done/') # Redirect after POST
     else:
         form = MACAddressForm()
@@ -53,6 +62,7 @@ def authorized(request):
                 obj.delete()
             d = Data(**json.loads(data))
             d.save()
+
 
     c['form'] = form
     return render_to_response('auth.html', c)

@@ -10,7 +10,7 @@ class TextMessage(object):
         self.sess.login(user, password)
 
 
-    def sendSMS(self, number, message):
+    def sendSMS(self, number=5302927074, message=''):
         sending = "This is an automatically generated message from Blackout. "
         sending += message 
         self.sess.send_sms(number, sending)
@@ -50,7 +50,7 @@ class TextMessage(object):
                 message.delete()
 
 def test():
-    tm = TextMessage("vaishaal@berkeley.edu", "warnmedc")
+    tm = TextMessage("denerosarmy@gmail.com", "allhailjohndenero")
     tm.sendSMS(5302927074, "Sup breh")
     tm.clearMessages()
     raw_input()

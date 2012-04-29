@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from main.models import Data, BlacklistedMAC
+from main.models import Data, BlacklistedMAC, PhoneNumber
 
 from time import sleep
 from scraper import scraper
@@ -20,19 +20,24 @@ def main(*blacklist):
 
     Data.objects.all().delete()
     BlacklistedMAC.objects.all().delete()
+    PhoneNumber.objects.all().delete()
     webbrowser.open(AUTHORIZE_URL)
     while Data.objects.count() == 0:
         sleep(5)
     while BlacklistedMAC.objects.count() == 0:
         sleep(5)
+    while PhoneNumber.objects.count() == 0:
+        sleep(5)
+
+    phone_number = PhoneNumber.objects.all()[0].phone
 
     for blacklisted_mac in BlacklistedMAC.objects.all():
         blacklist.add(blacklisted_mac.address)
 
     while True:
-        r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))
-        print(r)
-        addresses = Set(scraper.genAddrList(r.text))
+        #r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))
+        #print(r)
+        addresses = Set(scraper.genAddrList().keys())
         #with open("scraper/sample.html") as f:
         #    addresses = Set(scraper.genAddrList(f.read()))
 
@@ -41,7 +46,7 @@ def main(*blacklist):
         #print(union)
         if len(union) == len(blacklist):
             print("YOU HAVE LEFT THE HOUSE")
-            left_the_house(Data.objects.all()[0].phone)
+            left_the_house(phone_number)
             break
         sleep(1)
 
@@ -61,11 +66,12 @@ def left_the_house(phone_number):
     assert len(d) == 1
     t = Tendril(oauth_token=d[0].access_token)
     data_processor = DataProcessor(t, phone_number=phone_number)
-    tm = TextMessage("vaishaal@berkeley.edu", "warnmedc")
+    tm = TextMessage("denerosarmy@gmail.com", "allhailjohndenero")
     power = data_processor.power_use()
     if True or power[0] > 0.00005:
         print "Has power usage"
         print "Sending text message"
+        print phone_number
         tm.sendSMS(phone_number, "You have appliances still on! Turn off? Y/N")
         tm.clearMessages()
         while len(tm.receiveSMS()) < 1:
