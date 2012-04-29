@@ -42,7 +42,8 @@ def left_the_house(phone_number):
     print p.device_id_list
     print p.device_name_list
     print power
-    if power[0] > 0:
+    p.query_on_off('804f58aaaaaa0358')
+    if True or power[0] > 0.00005:
         print "Has power usage"
         print "Attempting to turn off..."
         power = p.turn_off('804f58aaaaaa0358')

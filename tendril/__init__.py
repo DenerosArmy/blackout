@@ -3,11 +3,12 @@ from copy import copy
 import string
 import requests
 import logging
+import sys
 
 class Tendril(object):
     """Class for a Tendril user connection"""
-    TENDRIL_URL = 'http://dev.tendrilinc.com'
-    def __init__(self, oauth_token='bbf00685300e5d45845ff6637bb471cf'):
+    TENDRIL_URL = 'https://dev.tendrilinc.com'
+    def __init__(self, oauth_token):
         """Create a connection to Tendril with a given OAuth token
 
         :param str oauth_token: OAuth token
@@ -28,7 +29,7 @@ class Tendril(object):
                 del unused_params[param.replace("-", "_")]
         if unused_params:
             full_url += ";" + ";".join([k.replace("_", "-") + "=" + v for k,v in unused_params.items()])
-        r = requests.get(full_url.replace("_", "-"), headers={'Access_Token': self.oauth_token})
+        r = requests.get(full_url.replace("_", "-"), headers={'Access_Token': self.oauth_token}, verify=False)
         if r:
             return r.text
         else:
@@ -50,9 +51,20 @@ class Tendril(object):
                 del unused_params[param.replace("-", "_")]
         if unused_params:
             full_url += ";" + ";".join([k.replace("_", "-") + "=" + v for k,v in unused_params.items()])
+
+        def log_request(req):
+            logging.info(req.url)
+            logging.info("HEADERS" + str(req.headers))
+            logging.info(req.data)
+
+        hooks = dict(pre_request=log_request)
         r = requests.post(full_url.replace("_", "-"),
                           data=data,
-                          headers={'Access_Token': self.oauth_token})
+                          headers={'Access_Token': self.oauth_token,
+                                   'Accept': 'application/xml',
+                                   'Content-Type': 'application/xml'},
+                          verify=False,
+                          hooks=hooks)
         if r:
             return r.text
         else:

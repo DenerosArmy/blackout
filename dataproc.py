@@ -18,6 +18,7 @@ class DataProcessor(object):
         self.device_name_list = []
         self.device_power_list = []
         self.list_devices()
+        self.power_use()
 
     def list_devices(self):
         user_XML = self.t.get('/connect/user/{user-id}/account/{account-id}/location/{location-id}/network/default-network/device',
@@ -77,7 +78,7 @@ class DataProcessor(object):
     def turn_off(self, device_id):
         text = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <setVoltDataRequest xmlns="http://platform.tendrilinc.com/tnop/extension/ems"
-  deviceId="{device_id}" locationId="{location_id}">
+  deviceId="{device_id}" locationId="{location-id}">
   <data>
     <mode>{mode}</mode>
   </data>
@@ -86,7 +87,7 @@ class DataProcessor(object):
         response_XML = self.t.post('/connect/device-action', text)
         parser = BeautifulSoup(response_XML)
         parser.prettify()
-        request_id = parser.html.body.setvoltdatarequest['requestid'] # HACK: use xml parser instead
+        request_id = parser.setVoltDataRequest['requestId']
         result = self.t.get('/connect/device-action/{request-id}', request_id=request_id)
         if "Off" not in result:
             print result
@@ -94,13 +95,15 @@ class DataProcessor(object):
         return True
 
     def query_on_off(self, device_id):
-        text = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<getVoltDataRequest
+        text = """<?xml version="1.0" encoding="UTF-8' standalone="yes"?>
+<{getRequest}
   xmlns="http://platform.tendrilinc.com/tnop/extension/ems"
-  deviceId="{device_id}" locationId="{location_id}">
-</getVoltDataRequest>
+  deviceId="{device-id}" locationId="{location-id}">
+</{getRequest}>
 """.format(device_id=device_id, location_id="62")
-        print '/connect/device-action'
-        print text
         response_XML = self.t.post('/connect/device-action', text)
-        print response_XML
+        parser = BeautifulSoup(response_XML)
+        parser.prettify()
+        request_id = parser.setVoltDataRequest['requestId']
+        result = self.t.get('/connect/device-action/{request-id}', request_id=request_id)
+        print result
