@@ -42,7 +42,6 @@ def checkArgs(blacklist):
 
 def left_the_house(phone_number):
     d = Data.objects.all()
-    print(len(d))
     assert len(d) == 1
     t = Tendril(oauth_token=d[0].access_token)
     data_processor = DataProcessor(t, phone_number=phone_number)
@@ -53,13 +52,18 @@ def left_the_house(phone_number):
         print "Sending text message"
         tm.sendSMS(phone_number, "You have appliances still on! Turn off? Y/N")
         tm.clearMessages()
-        while len(tm.receiveSMS()) <= 0:
+        while len(tm.receiveSMS()) < 1:
             pass
         print "SMS detected!"
         answer = tm.receiveSMS()[0][u'text']
-        if answer[0] == 'Y' or answer[0] == 'y':
+        print(answer)
+        if answer[0].lower() == 'y':
             print "Attempting to turn off..."
             power = data_processor.turn_off('804f58aaaaaa0358')
+            print "Powered off."
+            resp = tm.receiveSMS()
+        else:
+            print "Not powering off"
     else:
         print "Does not have power usage"
 
