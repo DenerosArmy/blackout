@@ -1,0 +1,141 @@
+<html><head>
+
+
+
+<link rel="STYLESHEET" type="text/css" href="st_wireless_files/css_router.css">
+<script language="JavaScript" src="st_wireless_files/public.js"></script>
+<script language="JavaScript" src="st_wireless_files/public_msg.js"></script>
+<script language="JavaScript"> 
+	var dDat = new Array();
+	var rDat = new Array();
+	var resert_rule = 0;
+	function station_list(){
+		var wireless_station_list = get_by_id("wireless_station_list").value;
+		dDat = wireless_station_list.split(",");
+		for (var i = 0; i < dDat.length - 1 ; i++){
+			rDat[i] = dDat[i].split("/");
+			document.write("<tr bgcolor=\"#FFFFFF\">");
+			document.write("<td><font face=\"Arial\" size=\"2\">"+ rDat[i][0] +"</font></td>");
+			document.write("<td><font face=\"Arial\" size=\"2\">"+ rDat[i][5] +"</font></td>");
+			document.write("<td><font face=\"Arial\" size=\"2\">"+ rDat[i][2] +"</font></td>");
+			document.write("<td><font face=\"Arial\" size=\"2\">"+ rDat[i][4] +"</font></td>");
+			document.write("<td><font face=\"Arial\" size=\"2\">"+ rDat[i][1] +"</font></td>");
+			document.write("</tr>");		
+			resert_rule++;
+		}
+		get_by_id("show_resert").innerHTML = resert_rule;
+	}
+
+</script>
+<title>D-LINK SYSTEMS, INC | WIRELESS ROUTER | HOME</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<style type="text/css">
+<!--
+.style4 {
+	font-size: 11px;
+	font-weight: bold;
+}
+-->
+</style>
+</head><body topmargin="1" leftmargin="0" rightmargin="0" bgcolor="#757575">
+	<table id="header_container" border="0" cellpadding="5" cellspacing="0" align="center" width="838">
+      <tbody><tr>
+        <td width="100%">&nbsp;&nbsp;Product Page: <a href="http://support.dlink.com.tw/">DIR-615</a></td>
+        <td align="right" nowrap="nowrap">Hardware Version: C1 &nbsp;</td>
+		<td align="right" nowrap="nowrap">Firmware Version: 3.10NA</td>
+		<td>&nbsp;</td>
+      </tr>
+    </tbody></table>
+	<table id="topnav_container" border="0" cellpadding="0" cellspacing="0" align="center" width="838">
+		<tbody><tr>
+			<td align="center" valign="middle"><img src="st_wireless_files/wlan_masthead.gif" height="92" width="836"></td>
+		</tr>
+	</tbody></table>
+	<table bgcolor="#ffffff" border="0" cellpadding="2" cellspacing="1" align="center" width="838">
+		<tbody><tr id="topnav_container">
+			<td><img src="st_wireless_files/short_modnum.gif" height="25" width="125"></td>
+			<td id="topnavoff"><a href="http://support.dlink.com/emulators/dir615_revc/310na/index.htm">SETUP</a></td>
+			<td id="topnavoff"><a href="http://support.dlink.com/emulators/dir615_revc/310na/adv_virtual.htm">ADVANCED</a></td>
+			<td id="topnavoff"><a href="http://support.dlink.com/emulators/dir615_revc/310na/tools_admin.htm">TOOLS</a></td>
+			<td id="topnavon"><a href="http://support.dlink.com/emulators/dir615_revc/310na/st_device.htm">STATUS</a></td>
+			<td id="topnavoff"><a href="http://support.dlink.com/emulators/dir615_revc/310na/support_men.htm">SUPPORT</a></td>
+		</tr>
+	</tbody></table>
+	<table bordercolordark="#FFFFFF" bgcolor="#ffffff" border="1" cellpadding="2" cellspacing="0" align="center" height="100%" width="838">
+		<tbody><tr>
+			<td id="sidenav_container" align="right" valign="top" width="125">
+				<table border="0" cellpadding="0" cellspacing="0">
+					<tbody><tr>
+						<td id="sidenav_container">
+							<div id="sidenav">
+							<!-- === BEGIN SIDENAV === -->
+								<ul>
+									<li><div><a href="http://support.dlink.com/emulators/dir615_revc/310na/st_device.htm">DEVICE INFO</a></div></li>
+									<li><div><a href="http://support.dlink.com/emulators/dir615_revc/310na/st_log.htm">LOGS</a></div></li>
+									<li><div><a href="http://support.dlink.com/emulators/dir615_revc/310na/st_stats.htm">STATISTICS</a></div></li>
+									<li><div><a href="http://support.dlink.com/emulators/dir615_revc/310na/internet_sessions.htm">INTERNET SESSIONS</a></div></li>
+									<li><div><a href="http://support.dlink.com/emulators/dir615_revc/310na/st_routing.htm">Routing</a></div></li>
+									<li><div id="sidenavoff">WIRELESS</div></li>
+									<li><div style="text-transform: none;"><a href="http://support.dlink.com/emulators/dir615_revc/310na/st_ipv6.htm">IPv6</a></div></li>
+								</ul>
+								<!-- === END SIDENAV === -->
+							</div>
+						</td>
+					</tr>
+                <tr><td>
+                 <!-- repeat name="extTab" -->
+                </td>
+				</tr></tbody></table>			
+			</td>
+			<form id="form1" name="form1" method="post" action="apply.cgi"></form>
+<input id="html_response_page" name="html_response_page" value="st_wireless.htm" type="hidden">
+<input id="html_response_message" name="html_response_message" value="The setting is saved." type="hidden">
+<input id="html_response_return_page" name="html_response_return_page" value="st_wireles.htm" type="hidden">
+
+<input id="wireless_station_list" name="wireless_station_list" value="" type="hidden">
+			<td id="maincontent_container" valign="top">
+				<div id="maincontent">
+					<!-- === BEGIN MAINCONTENT === -->
+					<div id="box_header"> 
+						<h1>Wireless</h1>
+						<p>Use this option to view the wireless clients that are connected to your wireless router.</p>
+					</div>
+					<div class="box"> 
+						<h2>Number Of Wireless Clients :&nbsp;<span id="show_resert">0</span></h2>
+							<table bgcolor="#dfdfdf" border="1" bordercolor="#ffffff" cellpadding="2" cellspacing="1" width="525">
+                              <tbody><tr id="box_header">
+							    <td><b>MAC Address</b></td>
+							    <td><b>IP Address</b></td>
+							    <td><b>Mode</b></td>
+							    <td><b>Rate</b></td>
+							    <td><b>Signal(%)</b></td>
+                              </tr>
+                              <script>
+                              	station_list(); 
+							  </script>
+                            </tbody></table>
+					</div>
+                </div></td>
+			<td id="sidehelp_container" align="left" valign="top" width="150">
+				<table bgcolor="#ffffff" border="0" cellpadding="2" cellspacing="0">
+					<tbody><tr>
+					  <td id="help_text"><strong>Helpful Hints&#8230;</strong>
+                      	<p>This is a list of all wireless clients that are currently connected to your wireless router.</p>
+                      	<p class="more"><a href="http://support.dlink.com/emulators/dir615_revc/310na/support_status.htm#Wireless">More&#8230;</a></p>
+					  </td>
+					</tr>
+				</tbody></table>
+			</td>
+		</tr>
+	</tbody></table>
+	<table id="footer_container" border="0" cellpadding="0" cellspacing="0" align="center" width="838">
+		<tbody><tr>
+			<td align="center" width="125">&nbsp;&nbsp;<img src="st_wireless_files/wireless_tail.gif" height="35" width="114"></td>
+			<td width="10">&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	</tbody></table>
+<br>
+<div id="copyright">Copyright © 2004-2008 D-Link Systems, Inc.</div>
+<br>
+</body></html>

@@ -1,0 +1,188 @@
+<html><head><title>DHCP Client Table</title>
+<meta http-equiv="expires" content="0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<link rel="stylesheet" type="text/css" href="DHCPTable_files/help.css">
+<!--
+<link rel="stylesheet" type="text/css" href="style.css">
+-->
+
+<link rel="stylesheet" type="text/css" href="DHCPTable_files/style_gn.css">
+
+<script src="DHCPTable_files/position.js"></script>
+<script src="DHCPTable_files/common.js"></script>
+
+<script language="javascript">
+function to_delete(num)
+{
+	var F = document.dhcp;
+	F.ip.value = num;
+	F.submit_button.value="DHCPTable";
+	F.submit_type.value="delete_single";
+	F.change_action.value="gozila_cgi";
+	//F.submit();
+}
+function SoryBy(F)
+{
+	F.submit_button.value="DHCPTable";
+	F.change_action.value="gozila_cgi";
+	//F.submit();
+}
+</script>
+
+</head>
+<body onload="{window.focus();}" bgcolor="#808080">
+<center>
+<form method="post" action="apply.cgi" name="dhcp">
+<input name="submit_button" type="hidden">
+<input name="change_action" type="hidden">
+<input name="submit_type" type="hidden">
+<input name="small_screen" type="hidden">
+<input name="ip" type="hidden">
+ <table class="UNDER_LAYER">
+ <tbody><tr><td><table>
+ <tbody><tr><td class="LOGO_LINE" colspan="2"></td></tr>
+ <tr><td class="ISHR" colspan="2"></td></tr>
+ <tr><td class="LOGO" colspan="2"></td></tr>
+ <tr><td class="FRINGE" colspan="2"></td></tr>
+ <tr><td class="FRINGE1"></td><td></td></tr>
+ <tr><td class="MAINFUN"><script>document.write("DHCP Client Table")</script>DHCP Client Table</td><td></td></tr>
+ <tr><td class="SUBFUN_help"><script>document.write("To Sort by")</script>To Sort by</td>
+ <td class="CONTENT">
+	    <p>
+	    <select onchange="SoryBy(this.form)" name="sortby" size="1"> 
+		    <option selected="selected" value="ip"><script>document.write("IP Address")</script>IP Address</option>
+		    <option value="mac"><script>document.write("MAC Address")</script>MAC Address</option>
+		    <option value="iface"><script>document.write("Interface")</script>Interface</option>
+		    <option value="name"><script>document.write("Client Name")</script>Client Name</option>
+                </select></p>
+		<p></p><hr><p></p>
+	    	<table class="SINGLE_MTABLE">
+		<tbody><tr>
+		<td class="M_TITLE1"><script>document.write("Client Name")</script>Client Name</td>
+                <td class="M_TITLE1"><script>document.write("Interface")</script>Interface</td>
+                <td class="M_TITLE1"><script>document.write("IP Address")</script>IP Address</td>
+                <td class="M_TITLE1"><script>document.write("MAC Address")</script>MAC Address</td>
+                <td class="M_TITLE1"><script>document.write("Expires Time")</script>Expires Time</td>
+                <td class="M_TITLE1"></td>
+              </tr>
+<script language="javascript">
+var table = new Array();
+var sortby = "";
+
+table[0] = new AAA('LocalName','192.168.1.124','00:00:00:00:00:00','23:42:28','LAN');
+
+
+function AAA(name,ip,mac,time,iface)
+{
+	this.name = name;
+	this.ip = ip;
+	this.mac = mac;
+	this.time = time;
+	this.iface = iface;
+}
+
+function ByName(a,b)
+{
+	if( a.name > b.name ) return 1;
+	else if (a.name == b.name ) return 0;
+	else return -1;
+}
+function ByMac(a,b)
+{
+	if( a.mac > b.mac ) return 1;
+	else if (a.mac == b.mac ) return 0;
+	else return -1;
+}
+function ByIp(a,b)
+{
+	var IP_a = a.ip.split('.');
+	var IP_b = b.ip.split('.');
+	if ( parseInt(IP_a[3]) > parseInt(IP_b[3]) ) return 1;
+	else if(IP_a[3] == IP_b[3] ) return 0 ; 
+	else return -1;
+}
+
+function ByIface(a,b)
+{
+	if( a.iface > b.iface ) return 1;
+	else if (a.iface == b.iface ) return 0;
+	else return -1;
+}
+
+if(sortby == "") {
+	sortby = "ip";
+}
+
+if(sortby == "name") {
+	table.sort(ByName);
+}
+else if(sortby == "mac") {
+	table.sort(ByMac);
+}
+else if(sortby == "ip") {
+	table.sort(ByIp);
+}
+else if(sortby == "iface") {
+	table.sort(ByIface);
+}
+
+var i = 0;
+var ip = new Array();
+var ret = 0;
+var w;
+
+for(i=0;;i++) {
+	//table.length = 0;
+	if(table.length == 0) {
+		table[0] = new AAA("None","None","None","None","None");
+		ret = 1;
+	}
+	else if(table.length == i) {
+		break;
+	}
+
+	if(table[i].iface == "WL")
+		table[i].iface = "Wireless";
+	else if(table[i].iface == "G")
+		table[i].iface = "Wireless"+"-G";
+	else if(table[i].iface == "B")
+		table[i].iface = "Wireless"+"-B";
+	else if(table[i].iface == "N")
+		table[i].iface = "Wireless"+"-N";
+	else if(table[i].iface == "LAN")
+		table[i].iface = "LAN";
+
+	if(ret != 1) {
+		ip = table[i].ip.split('.');
+	}
+	w = count_td_size(6,5,1); 	
+        document.write("<tr>");
+        document.write("<td class=M_CONTENT1 width="+w+">"+table[i].name+"</td>");
+        document.write("<td class=M_CONTENT1 width="+w+">"+table[i].iface+"</td>");
+        document.write("<td class=M_CONTENT1 width="+w+">"+table[i].ip+"</td>");
+        document.write("<td class=M_CONTENT1 width="+w+">"+table[i].mac+"</td>");
+        document.write("<td class=M_CONTENT1 width="+w+">"+table[i].time+"</td>");
+        document.write("<td class=M_CONTENT1>");
+	
+	if(ret == 1)
+                document.write("&nbsp;</TD>");
+	else
+		document.write("<INPUT  style=\"FONT-SIZE: 8pt; font-family:Arial\" type=button value='"+"Delete"+"' onclick=to_delete("+ip[3]+")></b></font></td>");
+        document.write("</tr>");
+
+	if(ret == 1)
+		break;
+
+}
+</script><tr><td class="M_CONTENT1" width="78">LocalName</td><td class="M_CONTENT1" width="78">LAN</td><td class="M_CONTENT1" width="78">192.168.1.124</td><td class="M_CONTENT1" width="78">00:00:00:00:00:00</td><td class="M_CONTENT1" width="78">23:42:28</td><td class="M_CONTENT1"><input style="FONT-SIZE: 8pt; font-family:Arial" value="Delete" onclick="to_delete(124)" type="button"></td></tr>
+</tbody></table>
+	<p><span class="FIXED_BT"><a href="javascript:location.replace('DHCPTable.html')"><script>document.write("Refresh")</script>Refresh</a></span>
+	<span class="FIXED_BT"><a href="javascript:window.close()"><script>document.write("Close")</script>Close</a></span></p>
+                            </td>
+                          </tr>
+</tbody></table></td></tr></tbody></table></form>
+</center></body></html>
