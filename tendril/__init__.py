@@ -106,12 +106,13 @@ class Tendril(object):
         :rtype: str
         """
         response_XML = self.get("/connect/user/{user-id}/account/{account-id}/location/{location-id}",
-                                  user_id='current-user',
-                                  account_id='default-account',
-                                  location_id='default_location')
+        user_id='current-user',
+        account_id='default-account',
+        location_id='default_location')
         parser = BeautifulSoup(response_XML)
         parser.prettify()
-        for node in parser.find_all('location'):
+        parser.find_all('MeterReading') 	
+	for node in parser.find_all('location'):
             return node['id']
 
     def set_device_mode(self, device_id, location_id, mode='Off'):
@@ -158,3 +159,38 @@ class Tendril(object):
             return 'Off'
         else:
             assert False
+	def read_meter(self,startTime, endTime,limit_to_latest,source): 
+		"""Returns actual or estimated meter readings for an account. Returns as dictionary of dictionaries, mapping mRIDs to a dictionary of times and meter readings. 
+
+		:param str startTime: The user's account ID, which corresponds to the seId entered in the user's database record.
+		:param datetime startTime: The start date and time for the returned data.
+		:param datetime endTime: The end date and time for the returned data.
+		:param string limit_to_latest: The total number of records to be returned.
+		:param string source Whether to return actual or estimated values.
+		"""
+
+		
+		
+		account_id = 'default-account'
+		result = self.get('/connect/meter/read',**{
+					'account_id':account_id ,
+					'from':startTime,
+					'to':endTime,
+					'limit_to_latest':limit_to_latest,
+					'source':source})
+		parser = BeautifulSoup(result)
+		parser.prettify() 
+		returnDict = {} 
+		meterReadings = parser.find_all('MeterReading') 
+		for eachMeter in meterReadings:
+					returnDict[eachMeter.MeterAsset.mRID.originalEncoding] = {} 
+					meterReading = eachMeter.find_all('Reading') 
+					for eachMeterReading in eachMeter:
+						returnDict[eachMeter.MeterAsset.mRID.originalEncoding][eachMeterReading.timeStamp.originalEncoding] = eachMeterReading.value.originalEncoding
+						
+						returnDict[eachMeter.MeterAsset.mRID.originalEncoding][eachMeterReading.timeStamp.originalEncoding] = eachMeterReading.ReadingQualities.quality.originalEncoding
+
+		return returnDict
+
+
+	
