@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from tendril_oauth.models import Data
+from main.models import Data
 
 from time import sleep
 from scraper import scraper
