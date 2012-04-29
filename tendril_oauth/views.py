@@ -6,7 +6,7 @@ import json
 from models import Data
 API_KEY = 'a4ca80c12d6fc2612858602edc4d75dd'
 APP_SECRET = '08096b9b773a9e48205cd9fa9534390d' 
-AUTHORIZE_URL = 'https://dev.tendrilinc.com/oauth/authorize?response_type=code&client_id=a4ca80c12d6fc2612858602edc4d75dd&redirect_uri=localhost:1337/auth&scope=\'consumption\'&state=dog'
+AUTHORIZE_URL = 'http://dev.tendrilinc.com/oauth/authorize?response_type=code&client_id=a4ca80c12d6fc2612858602edc4d75dd&redirect_uri=localhost:1337/auth&scope=\'consumption\'&state=dog'
 
 
 def authorized(request):
@@ -17,9 +17,12 @@ def authorized(request):
 	ACCESS_TOKEN_URL += '&redirect_uri=www.google.com' 
 	ACCESS_TOKEN_URL += '&client_id='+API_KEY 
 	ACCESS_TOKEN_URL += '&client_secret='+APP_SECRET 
-	
-	Data(**json.loads(requests.get(ACCESS_TOKEN_URL).text)) 
-	Data.save()
-	return HttpResponse("Authorized!") 
-	
+
+	data = requests.get(ACCESS_TOKEN_URL, verify=False).text
+	for obj in Data.objects.all():
+		obj.delete()
+	d = Data(**json.loads(data))
+	d.save()
+	return HttpResponse(data)
+
 
