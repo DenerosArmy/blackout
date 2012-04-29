@@ -18,7 +18,6 @@ def extractsms(htmlsms) :
 
     Output is a list of dictionaries, one per message.
     """
-    print(htmlsms)
     msgitems = []                                       # accum message items here
     #   Extract all conversations by searching for a DIV with an ID at top level.
     tree = bs4.BeautifulSoup(htmlsms)           # parse HTML into tree
@@ -30,9 +29,8 @@ def extractsms(htmlsms) :
             #   For each row, which is one message, extract all the fields.
             msgitem = {"id" : conversation["id"]}       # tag this message with conversation ID
             spans = row.findAll("span",attrs={"class" : True}, recursive=False)
-            print(spans)
             for span in spans :                         # for all spans in row
-                cl = span["class"].replace('gc-message-sms-', '')
+                cl = span["class"][0].replace('gc-message-sms-', '')
                 msgitem[cl] = (" ".join(span.findAll(text=True))).strip()   # put text in dict
             msgitems.append(msgitem)                    # add msg dictionary to list
     return msgitems
@@ -44,11 +42,19 @@ def receiveSMS():
     voicei.sms()
 
     for msg in extractsms(voicei.sms.html):
-        print str(msg)
+        print(str(msg))
+
+def clearMessages():
+    voicei = voice.Voice()
+    voicei.login("vaishaal@berkeley.edu", "warnmedc")
+
+    for message in voicei.sms().messages:
+            message.delete()
 
 def test():
     sendSMS(5302927074, "Sup breh")
-    while True:
-        receiveSMS()
+    clearMessages()
+    raw_input()
+    receiveSMS()
 
-test()
+#test()
