@@ -131,6 +131,7 @@ class Tendril(object):
 </setVoltDataRequest>
 """.format(device_id=device_id, location_id=location_id, mode=mode)
         xml = self.post('/connect/device-action', text)
+        print xml
         parser = BeautifulSoup(xml)
         parser.prettify()
         request_id = parser.html.body.setvoltdatarequest['requestid'] # HACK: use xml parser instead
