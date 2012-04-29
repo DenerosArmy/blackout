@@ -8,5 +8,11 @@ class Data(models.Model):
     scope = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
 
+    def __unicode__(self):
+		return self.access_token
 
+class BlacklistedMAC(models.Model):
+    address = models.CharField(max_length=50)
 
+    def __unicode__(self):
+		return self.address
