@@ -134,7 +134,11 @@ class Tendril(object):
         print xml
         parser = BeautifulSoup(xml)
         parser.prettify()
-        request_id = parser.html.body.setvoltdatarequest['requestid'] # HACK: use xml parser instead
+        find = parser.find_all('setvoltdatarequest')
+        if len(find) != 1:
+            logging.error("Could not parse XML response")
+            return False
+        request_id = find[0]['requestid']
         result = self.get('/connect/device-action/{request-id}', request_id=request_id)
         if mode not in result:
             logging.error(result)
