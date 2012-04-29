@@ -4,3 +4,6 @@
 local_settings.py
 doc/_build
 router/DHCPTable.html
+.*.sw[a-z]
+8.un~
+Session.vim
