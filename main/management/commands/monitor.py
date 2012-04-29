@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from main.models import Data
+from main.models import Data, BlacklistedMAC
 
 from time import sleep
 from scraper import scraper
@@ -12,6 +12,8 @@ import requests
 def main(phone_number, *blacklist):
     checkArgs(blacklist)
     blacklist = Set(blacklist)
+    for blacklisted_mac in BlacklistedMAC.objects.all():
+        blacklist.add(blacklisted_mac.address)
 
     while True:
         # r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))
