@@ -111,7 +111,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tendril_oauth',
     'main',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
