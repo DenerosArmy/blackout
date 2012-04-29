@@ -27,8 +27,8 @@ class Tendril(object):
             if param is not None:
                 del unused_params[param.replace("-", "_")]
         if unused_params:
-            full_url += ";".join([k.replace("_", "-") + "=" + v for k,v in unused_params.items()])
-        r = requests.get(full_url, headers={'Access_Token': self.oauth_token})
+            full_url += ";" + ";".join([k.replace("_", "-") + "=" + v for k,v in unused_params.items()])
+        r = requests.get(full_url.replace("_", "-"), headers={'Access_Token': self.oauth_token})
         if r:
             return r.text
         else:
@@ -49,8 +49,8 @@ class Tendril(object):
             if param is not None:
                 del unused_params[param.replace("-", "_")]
         if unused_params:
-            full_url += ";".join([k.replace("_", "-") + "=" + v for k,v in unused_params.items()])
-        r = requests.post(full_url,
+            full_url += ";" + ";".join([k.replace("_", "-") + "=" + v for k,v in unused_params.items()])
+        r = requests.post(full_url.replace("_", "-"),
                           data=data,
                           headers={'Access_Token': self.oauth_token})
         if r:
@@ -58,4 +58,3 @@ class Tendril(object):
         else:
             logging.error(r.text)
             return None
-
