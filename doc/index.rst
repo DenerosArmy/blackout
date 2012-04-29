@@ -11,16 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-Tendril-OAuth
+Tendril
 =============
 
-.. automodule:: tendril_oauth
-   :members:
-
-Router
-=============
-
-.. automodule:: router.gen
+.. automodule:: tendril
    :members:
 
 SMS
@@ -29,11 +23,12 @@ SMS
 .. automodule:: sms
    :members:
 
-Tendril
+Router
 =============
 
-.. automodule:: tendril
+.. automodule:: router.gen
    :members:
+
 
 Indices and tables
 ==================

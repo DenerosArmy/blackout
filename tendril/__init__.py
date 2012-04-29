@@ -73,6 +73,10 @@ class Tendril(object):
             return None
 
     def devices(self):
+        """Return a device dictionary for the current user
+
+        :rtype: Dictionary from device id to device name
+        """
         xml = self.get('/connect/user/{user-id}/account/{account-id}/location/{location-id}/network/default-network/device',
                          user_id='current-user',
                          account_id='default-account',
@@ -97,6 +101,10 @@ class Tendril(object):
         return dict(zip(device_id_list, device_name_list))
 
     def get_location(self):
+        """Get the location id for the current user
+
+        :rtype: str
+        """
         response_XML = self.get("/connect/user/{user-id}/account/{account-id}/location/{location-id}",
                                   user_id='current-user',
                                   account_id='default-account',
@@ -107,6 +115,13 @@ class Tendril(object):
             return node['id']
 
     def set_device_mode(self, device_id, location_id, mode='Off'):
+        """Set the mode for a given device
+
+        :param str device_id: Device id
+        :param str device_id: Location id
+        :param str mode: Either 'On' or 'Off'
+        :return: True on success, False on failure
+        """
         text = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <setVoltDataRequest xmlns="http://platform.tendrilinc.com/tnop/extension/ems"
   deviceId="{device_id}" locationId="{location_id}">
@@ -126,6 +141,10 @@ class Tendril(object):
         return True
 
     def query_device_mode(self, device_id, location_id):
+        """Get the mode for a given device
+
+        :return: Either 'On' or 'Off'
+        """
         text = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <getVoltDataRequest
   xmlns="http://platform.tendrilinc.com/tnop/extension/ems"
