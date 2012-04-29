@@ -11,24 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-Tendril
-=============
-
-.. automodule:: tendril
-   :members:
-
-SMS
-=============
-
-.. automodule:: sms
-   :members:
-
-Router
-=============
-
-.. automodule:: router.gen
-   :members:
-
+   tendril
+   others
 
 Indices and tables
 ==================
