@@ -7,3 +7,4 @@ router/DHCPTable.html
 .*.sw[a-z]
 8.un~
 Session.vim
+main.db
