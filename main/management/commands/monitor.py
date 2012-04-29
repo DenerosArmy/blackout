@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from main.models import Data, BlacklistedMAC
+from main.models import Data, BlacklistedMAC, PhoneNumber
 
 from time import sleep
 from scraper import scraper
@@ -20,11 +20,16 @@ def main(*blacklist):
 
     Data.objects.all().delete()
     BlacklistedMAC.objects.all().delete()
+    PhoneNumber.objects.all().delete()
     webbrowser.open(AUTHORIZE_URL)
     while Data.objects.count() == 0:
         sleep(5)
     while BlacklistedMAC.objects.count() == 0:
         sleep(5)
+    while PhoneNumber.objects.count() == 0:
+        sleep(5)
+
+    phone_number = PhoneNumber.objects.all()[0].phone
 
     for blacklisted_mac in BlacklistedMAC.objects.all():
         blacklist.add(blacklisted_mac.address)
@@ -41,7 +46,7 @@ def main(*blacklist):
         #print(union)
         if len(union) == len(blacklist):
             print("YOU HAVE LEFT THE HOUSE")
-            left_the_house(Data.objects.all()[0].phone)
+            left_the_house(phone_number)
             break
         sleep(1)
 
