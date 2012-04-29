@@ -14,11 +14,11 @@ def main(phone_number, *blacklist):
     blacklist = Set(blacklist)
 
     while True:
-        # r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))
-        # print(r)
-        # addresses = Set(scraper.genAddrList(r.text))
-        with open("scraper/sample.html") as f:
-            addresses = Set(scraper.genAddrList(f.read()))
+        r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))
+        print(r)
+        addresses = Set(scraper.genAddrList(r.text))
+        #with open("scraper/sample.html") as f:
+        #    addresses = Set(scraper.genAddrList(f.read()))
 
         print(addresses)
         union = blacklist.union(addresses)
