@@ -46,11 +46,7 @@ def left_the_house(phone_number):
     p = DataProcessor(t, phone_number=phone_number)
     tm = TextMessage("vaishaal@berkeley.edu", "warnmedc")
     power = p.power_use()
-    print p.device_id_list
-    print p.device_name_list
-    print power
-    p.query_on_off('804f58aaaaaa0358')
-    if True or power[0] > 0.00005:
+    if power[0] > 0.00005:
         print "Has power usage"
         print "Sending text message"
         tm.sendSMS(phone_number, "You have appliances still on! Turn off? Y/N")
