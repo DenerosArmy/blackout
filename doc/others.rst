@@ -4,8 +4,8 @@ SMS API
 .. automodule:: sms
    :members:
 
-Router Page Generator
+Router Page Scraper
 =====================
 
-.. automodule:: router.gen
+.. automodule:: scraper.scraper
    :members:

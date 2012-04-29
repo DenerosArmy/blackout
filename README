@@ -1,2 +1,8 @@
-blackout
-========
+Project Blackout -- for a greener future
+========================================
+
+A background app that keeps your power consumption in check when you are not at home.
+
+To run: ./blackout
+
+To build documentation, run "make html" inside doc/
