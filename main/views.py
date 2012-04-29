@@ -33,11 +33,11 @@ def authorized(request):
         if form.is_valid():
             choices = form.cleaned_data['addresses']
             BlacklistedMAC.objects.all().delete()
+            phone = form.cleaned_data['phone'].replace('(','').replace(')','').replace('-','').replace('.','')
+            Data.objects.all()[0].phone = phone
             for mac in choices:
                 obj = BlacklistedMAC(address=mac)
                 obj.save()
-            phone = form.cleaned_data['phone'].replace('(','').replace(')','').replace('-','').replace('.','')
-            Data.objects.all()[0].phone = phone
             return HttpResponseRedirect('/done/') # Redirect after POST
     else:
         form = MACAddressForm()
