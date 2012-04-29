@@ -18,7 +18,6 @@ class DataProcessor(object):
         self.device_name_list = []
         self.device_power_list = []
         self.list_devices()
-        self.power_use()
 
     def list_devices(self):
         user_XML = self.t.get('/connect/user/{user-id}/account/{account-id}/location/{location-id}/network/default-network/device',
@@ -93,4 +92,4 @@ class DataProcessor(object):
             print result
             return False
         return True
-            
+
