@@ -1,7 +1,8 @@
 """ scraper.py """
 
+from StringIO import StringIO
 
-def findTableLines(html):
+def findTableLinesFromFile(html):
     """Finds the specific lines in the file that contains the table code
 
     :param file html: The html file to be parsed through
@@ -19,6 +20,10 @@ def findTableLines(html):
         table_lines.append(line[:-1])
         line = html.readline()
     return table_lines
+
+def findTableLinesFromText(html):
+    string = StringIO(html)
+    return findTableLinesFromFile(string)
 
 def parseTableLines(lines):
     """Parses through the list of lines to generate a list of MAC addresses
@@ -39,7 +44,8 @@ def genAddrList(html):
     :param file html: The html file to be parsed
     :rtntype: list
     """
-    lines = findTableLines(open(html))
+    #lines = findTableLinesFromFile(html)
+    lines = findTableLinesFromText(html)
     names = parseTableLines(lines)
     return names
 
