@@ -1,4 +1,4 @@
-from googlevoice import Voice, util
+from voice import Voice, util
 from os import path, remove
 from unittest import TestCase, main
 
