@@ -50,7 +50,7 @@ class TextMessage(object):
                 message.delete()
 
 def test():
-    tm = TextMessage("vaishaal@berkeley.edu", "warnmedc")
+    tm = TextMessage("denerosarmy@gmail.com", "allhailjohndenero")
     tm.sendSMS(5302927074, "Sup breh")
     tm.clearMessages()
     raw_input()

@@ -20,9 +20,12 @@ class MACAddressForm(forms.Form):
 def authorized(request):
     c = {}
     c.update(csrf(request))
-    with open("scraper/sample.html") as f:
-        addresses = scraper.genAddrList(f.read())
-        addresses = [(x, 'Test (' + x + ')') for x in addresses]
+    #with open("scraper/sample.html") as f:
+    #    addresses = scraper.genAddrList(f.read())
+    #    addresses = [(x, 'Test (' + x + ')') for x in addresses]
+    addresses = scraper.genAddrList()
+    addresses = [(k,v + '(' + k +')') for k,v in addresses.items()]
+
 
     if request.method == 'POST': # If the form has been submitted...
         form = MACAddressForm(request.POST) # A form bound to the POST data

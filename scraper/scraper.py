@@ -1,6 +1,7 @@
 """ scraper.py """
 
 from StringIO import StringIO
+import requests
 
 def findTableLinesFromFile(html):
     """Finds the specific lines in the file that contains the table code
@@ -31,13 +32,14 @@ def parseTableLines(lines):
     :param list lines: The list of valid lines from the router html file
     :rtype: list
     """
-    addresses = []
+    addresses = {}
     for line in lines:
         line = line.split(',')
-        addresses.append(line[2][1:-1])
+        name = line[0].split("'")[-2]
+        addresses[line[2][1:-1]] = name
     return addresses
 
-def genAddrList(html):
+def genAddrList():
     """Generates a list of MAC addresses from an html page of the router's
     device list
 
@@ -45,13 +47,15 @@ def genAddrList(html):
     :rtntype: list
     """
     #lines = findTableLinesFromFile(html)
-    lines = findTableLinesFromText(html)
+    r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))    
+    lines = findTableLinesFromText(r.text)
     names = parseTableLines(lines)
     return names
 
 def test():
-    lines = findTableLines(open('sample.html'))
+    lines = findTableLinesFromFile(open('sample.html'))
+    print(lines)
     names = parseTableLines(lines)
     print(names)
 
-#main()
+#test()

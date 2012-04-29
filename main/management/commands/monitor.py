@@ -30,9 +30,9 @@ def main(*blacklist):
         blacklist.add(blacklisted_mac.address)
 
     while True:
-        r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))
-        print(r)
-        addresses = Set(scraper.genAddrList(r.text))
+        #r = requests.get('http://192.168.1.1/DHCPTable.asp', auth=('admin', 'admin'))
+        #print(r)
+        addresses = Set(scraper.genAddrList().keys())
         #with open("scraper/sample.html") as f:
         #    addresses = Set(scraper.genAddrList(f.read()))
 
@@ -61,11 +61,12 @@ def left_the_house(phone_number):
     assert len(d) == 1
     t = Tendril(oauth_token=d[0].access_token)
     data_processor = DataProcessor(t, phone_number=phone_number)
-    tm = TextMessage("vaishaal@berkeley.edu", "warnmedc")
+    tm = TextMessage("denerosarmy@gmail.com", "allhailjohndenero")
     power = data_processor.power_use()
     if True or power[0] > 0.00005:
         print "Has power usage"
         print "Sending text message"
+        print phone_number
         tm.sendSMS(phone_number, "You have appliances still on! Turn off? Y/N")
         tm.clearMessages()
         while len(tm.receiveSMS()) < 1:

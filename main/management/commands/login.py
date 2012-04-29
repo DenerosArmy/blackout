@@ -8,6 +8,6 @@ class Command(BaseCommand):
     help = 'Logs in using OAuth'
 
     def handle(self, *args, **options):
-        Data.objects.all().delete():
+        Data.objects.all().delete()
         webbrowser.open(AUTHORIZE_URL)
         while Data.objects.count()
