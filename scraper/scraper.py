@@ -22,10 +22,14 @@ def parseTableLines(lines):
         addresses.append(line[2][1:-1])
     return addresses
 
+def genAddrList(html):
+    lines = findTableLines(open(html))
+    names = parseTableLines(lines)
+    return names
 
-def main():
+def test():
     lines = findTableLines(open('sample.html'))
     names = parseTableLines(lines)
     print(names)
 
-main()
+#main()
