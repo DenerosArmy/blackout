@@ -1,0 +1,1 @@
+{"name":"Project Blackout","body":"### About Project Blackout\r\n\r\nA background app that keeps your power consumption in check when you are not at home.\r\n\r\nTo run: ./blackout\r\n\r\nTo build documentation, run \"make html\" inside doc/\r\n","tagline":"For a greener future","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
